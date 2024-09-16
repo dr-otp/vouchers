@@ -12,3 +12,55 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Voucher {
+  id       String        @id @default(cuid())
+  code     Int           @unique @default(autoincrement())
+  status   VoucherStatus @default(CREATED)
+  userId   String        @map("user_id")
+  clientId String        @map("client_id")
+
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+  deletedAt DateTime?     @map("deleted_at")
+  log       VoucherLog[]
+  items     VoucherItem[]
+
+  @@map("voucher")
+}
+
+model VoucherLog {
+  id          String @id @default(cuid())
+  description String @db.VarChar(255)
+
+  voucherId String  @map("voucher_id")
+  voucher   Voucher @relation(fields: [voucherId], references: [id], onDelete: Cascade)
+  userId    String  @map("user_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("voucher_history")
+}
+
+// This is a model that represents the items in the voucher
+model VoucherItem {
+  id       String @id @default(cuid())
+  quantity Int
+
+  voucherId String  @map("voucher_id")
+  voucher   Voucher @relation(fields: [voucherId], references: [id], onDelete: Cascade)
+  productId String  @map("product_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("voucher_item")
+}
+
+enum VoucherStatus {
+  CREATED
+  RECEIVED
+  REJECTED
+  RETURNED_TO_SENDER
+  RETURNED_TO_SUPPLIER
+  CANCELLED
+}
