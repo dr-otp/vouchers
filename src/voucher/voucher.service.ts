@@ -22,7 +22,7 @@ export class VoucherService extends PrismaClient implements OnModuleInit {
 
   create(createVoucherDto: CreateVoucherDto) {
     try {
-      const { items, userId } = createVoucherDto;
+      const { items, userId, clientId } = createVoucherDto;
 
       return this.voucher.create({
         data: {
@@ -30,6 +30,7 @@ export class VoucherService extends PrismaClient implements OnModuleInit {
           items: { createMany: { data: items } },
           status: VoucherStatus.CREATED,
           userId,
+          clientId,
         },
       });
     } catch (error) {
@@ -72,7 +73,7 @@ export class VoucherService extends PrismaClient implements OnModuleInit {
     if (!voucher)
       throw new RpcException({
         status: HttpStatus.NOT_FOUND,
-        message: `User with id ${id} not found`,
+        message: `Voucher with id ${id} not found`,
       });
 
     const [computedVoucher] = await this.getUsers([voucher]);

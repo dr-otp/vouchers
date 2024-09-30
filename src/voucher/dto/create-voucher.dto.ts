@@ -1,6 +1,7 @@
 import { Type } from 'class-transformer';
 import { ArrayMinSize, IsArray, IsUUID, ValidateNested } from 'class-validator';
 import { VoucherItemDto } from './voucher-item.dto';
+import { IsCuid } from 'src/common';
 
 export class CreateVoucherDto {
   @IsArray()
@@ -10,5 +11,10 @@ export class CreateVoucherDto {
   items: VoucherItemDto[];
 
   @IsUUID()
+  @Type(() => String)
   userId: string;
+
+  @IsCuid()
+  @Type(() => String)
+  clientId: string;
 }
