@@ -11,7 +11,7 @@ export class VoucherController {
 
   @MessagePattern('voucher.health')
   healthCheck() {
-    return 'Auth service is up and running';
+    return 'Voucher service is up and running';
   }
 
   @MessagePattern('voucher.create')
