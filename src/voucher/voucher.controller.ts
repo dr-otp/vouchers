@@ -15,8 +15,9 @@ export class VoucherController {
   }
 
   @MessagePattern('voucher.create')
-  create(@Payload() createVoucherDto: CreateVoucherDto) {
-    return this.voucherService.create(createVoucherDto);
+  create(@Payload() payload: { createVoucherDto: CreateVoucherDto; user: User }) {
+    const { createVoucherDto, user } = payload;
+    return this.voucherService.create(createVoucherDto, user);
   }
 
   @MessagePattern('voucher.find.all')
@@ -38,9 +39,29 @@ export class VoucherController {
     return this.voucherService.findOne(id, user);
   }
 
+  @MessagePattern('voucher.update.receive')
+  receive(@Payload() payload: { id: string; user: User }) {
+    const { id, user } = payload;
+
+    if (!isCuid(id))
+      throw new RpcException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Invalid voucher id',
+      });
+
+    return this.voucherService.receiveVoucher(id, user);
+  }
+
   @MessagePattern('voucher.update.status')
   update(@Payload() payload: { updateDto: UpdateVoucherStatusDto; user: User }) {
     const { updateDto, user } = payload;
+
+    if (!isCuid(updateDto.id))
+      throw new RpcException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Invalid voucher id',
+      });
+
     return this.voucherService.updateStatus(updateDto, user);
   }
 

@@ -3,7 +3,7 @@ import { VoucherStatus } from '@prisma/client';
 export class ValidateTransitionHelper {
   private static allowedTransitions = {
     [VoucherStatus.CREATED]: [VoucherStatus.RECEIVED, VoucherStatus.REJECTED],
-    [VoucherStatus.RECEIVED]: [VoucherStatus.RETURNED_TO_SENDER, VoucherStatus.RETURNED_TO_SUPPLIER],
+    [VoucherStatus.RECEIVED]: [VoucherStatus.RETURNED_TO_SENDER, VoucherStatus.RETURNED_TO_SUPPLIER, VoucherStatus.CANCELLED],
     [VoucherStatus.REJECTED]: [],
     [VoucherStatus.RETURNED_TO_SENDER]: [],
     [VoucherStatus.RETURNED_TO_SUPPLIER]: [],

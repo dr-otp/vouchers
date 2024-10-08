@@ -14,17 +14,21 @@ datasource db {
 }
 
 model Voucher {
-  id       String        @id @default(cuid())
-  code     Int           @unique @default(autoincrement())
-  status   VoucherStatus @default(CREATED)
-  userId   String        @map("user_id")
-  clientId String        @map("client_id")
+  id         String        @id @default(cuid())
+  code       Int           @unique @default(autoincrement())
+  status     VoucherStatus @default(CREATED)
+  customerId String        @map("client_id")
 
-  createdAt DateTime      @default(now()) @map("created_at")
-  updatedAt DateTime      @updatedAt @map("updated_at")
-  deletedAt DateTime?     @map("deleted_at")
-  log       VoucherLog[]
-  items     VoucherItem[]
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  createdById String? @map("created_by_id")
+  updatedById String? @map("updated_by_id")
+  deletedById String? @map("deleted_by_id")
+
+  log   VoucherLog[]
+  items VoucherItem[]
 
   @@map("voucher")
 }
